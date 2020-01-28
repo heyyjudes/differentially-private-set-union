@@ -1,6 +1,6 @@
 # Differentially Private Set Union for Vocabulary Release
 This repository contains the code and dataset for the following paper:  
-> **Dierentially Private Set Union with Applications to Vocabulary
+> **Differentially Private Set Union with Applications to Vocabulary
 Generation**<br>
 > Pankaj Gulhane, Sivakanth Gopi, Janardhan Kulkarni, Judy Hanwen Shen,
 Milad Shokouhi, and Sergey Yekhanin<br>
