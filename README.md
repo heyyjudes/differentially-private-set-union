@@ -1,5 +1,13 @@
 # Differentially Private Set Union for Vocabulary Release
-One Paragraph of project description goes here
+This repository contains the code and dataset for the following paper:  
+> **Dierentially Private Set Union with Applications to Vocabulary
+Generation**<br>
+> Pankaj Gulhane, Sivakanth Gopi, Janardhan Kulkarni, Judy Hanwen Shen,
+Milad Shokouhi, and Sergey Yekhanin<br>
+> https://arxiv.org/
+>
+> **Abstract:** *Motivated by many applications in language modeling, we study the basic operation of set union in the differential privacy setting. In the set union problem, we are given a universe U of items, possibly of infinite size. Suppose we are given a database D of users. Each user i contributes a subset W_i of U. We want an (epsilon, delta)-differentially private Algorithm A which outputs a subset S such that the size of S is as large as possible.
+In this paper, we design new algorithms for this problem, which substantially improve upon the algorithms that can be derived by known techniques in the literature.*
 
 ## Prerequisites
 
@@ -30,12 +38,8 @@ This generates and saves a histogram with the Policy Gaussian algorithm and outp
 python gen_histogram.py --alg policy --noise laplace --n 2 --trials 3
 ```
 To change which algorithm is used specify the --alg and --noise parameter. 
-To change the n of ngrams in the histogram use: --ngrams For multiple shuffles 
+To change the n of ngrams in the histogram use: --ngrams . For multiple shuffles 
 of the dataset, use the --trials parameter. 
-
-
-## Paper
-tbd 
 
 ## Acknowledgments
 
