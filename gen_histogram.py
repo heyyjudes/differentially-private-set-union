@@ -145,25 +145,33 @@ def main():
     parser.add_argument("--D0",
                         type=int,
                         default=10,
-                        help="input sensitivity"
-                        )
+                        help="input sensitivity")
+
     parser.add_argument("--eps",
                         type=float,
                         default=3,
                         help="epsilon dp parameter")
+
     parser.add_argument("--delta",
                         type=float,
                         default=np.e**(-10),
-                        help="delta dp parameter")
+                        help="threshold parameter")
+
     parser.add_argument("--alg",
                         type=str,
                         default="policy",
                         help="algorithm type: count, weighted, policy")
 
+    parser.add_argument("--alpha",
+                        type=float,
+                        default=5,
+                        help="delta dp parameter")
+
     parser.add_argument("--noise",
                         type=str,
                         default="gaussian",
                         help="noise type: laplace, gaussian, rdp")
+
     parser.add_argument('--ngram',
                         type=int,
                         default=1,
@@ -214,9 +222,10 @@ def main():
     reddit_df = reddit_df.dropna()
 
     result_arr = test_histogram(input_df=reddit_df, Delta_0=args.D0, n=args.ngram, distribution=dist, algorithm=alg,
-                             eps=args.eps, delta=args.delta, num_iter=args.trials, passes=args.passes, save_hist=args.save_histogram)
+                                eps=args.eps, delta=args.delta, num_iter=args.trials, passes=args.passes,
+                                alpha=args.alpha, save_hist=args.save_histogram)
 
-    print("Output for {} {} with {} trials run".format(alg, dist, args.trials))
+    print("Output for {} {} with {} trials for alpha {} run".format(alg, dist, args.trials, args.alpha))
     print("Mean released ngram count:", np.mean(result_arr))
     print("STD of released ngram count: ", np.std(result_arr))
 
