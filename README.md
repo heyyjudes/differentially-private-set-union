@@ -2,12 +2,11 @@
 This repository contains the code and dataset for the following paper:  
 > **Differentially Private Set Union with Applications to Vocabulary
 Generation**<br>
-> Pankaj Gulhane, Sivakanth Gopi, Janardhan Kulkarni, Judy Hanwen Shen,
+> Sivakanth Gopi, Pankaj Gulhane, Janardhan Kulkarni, Judy Hanwen Shen,
 Milad Shokouhi, and Sergey Yekhanin<br>
-> https://arxiv.org/
+> https://arxiv.org/abs/2002.09745
 >
-> **Abstract:** *Motivated by many applications in language modeling, we study the basic operation of set union in the differential privacy setting. In the set union problem, we are given a universe U of items, possibly of infinite size. Suppose we are given a database D of users. Each user i contributes a subset W_i of U. We want an (epsilon, delta)-differentially private Algorithm A which outputs a subset S such that the size of S is as large as possible.
-In this paper, we design new algorithms for this problem, which substantially improve upon the algorithms that can be derived by known techniques in the literature.*
+> **Abstract:** *We study the basic operation of set union in the global model of differential privacy. In this problem, we are given a universe U of items, possibly of infinite size, and a database D of users. Each user i contributes a subset W_i of items. We want an (epsilon, delta)-differentially private Algorithm which outputs a subset S (a union of subsets W_i) such that the size of S is as large as possible. The problem arises in countless real world applications, and is particularly ubiquitous in natural language processing (NLP) applications. For example, discovering words, sentences, n-grams etc., from private text data belonging to users is an instance of the set union problem. In this paper we design new algorithms for this problem that significantly outperform the best known algorithms.*
 
 ## Prerequisites
 
