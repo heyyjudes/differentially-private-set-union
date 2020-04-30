@@ -253,7 +253,7 @@ class Histogram:
 
         return self.ngram_hist
 
-    def generate_policy_gaussian_hist(self, delta_0, Gamma, passes=2, delta=None):
+    def generate_policy_gaussian_hist(self, delta_0, Gamma, passes=1, delta=None):
         '''
         Generate histogram according to Policy Gaussian histogram
         :param delta_0: parameter limiting number of unique ngrams each user can contribute
