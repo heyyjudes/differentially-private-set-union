@@ -189,7 +189,6 @@ def main():
 
     parser.add_argument('--dataset',
                         type=str,
-                        default="data/clean_askreddit.csv",
                         help='path to dataset in .csv format with "clean_data" column')
 
     parser.add_argument("--save_histogram",
