@@ -19,12 +19,8 @@ tqdm >= 4.23.4
 ```
 
 ## Dataset
-```
-unzip data/clean_askreddit.csv.zip
-```
-The default dataset used in this repo is clean_askreddit.csv.  
 For your own input file, the file must contain an "author" and a "clean_text" column where the clean text has been 
-preprocessed and tokenized. For an example, see utils.py. 
+preprocessed and tokenized. For an example, see utils.py. The code in our repo searches for the input dataset in the 'data' directory. 
 
 ## Example: Generating a Histogram
 
