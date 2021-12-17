@@ -94,9 +94,6 @@ class Histogram:
                     posts = [ut.tokens2ngram(p, self.n) for p in posts]
                 words = [tokens for p in posts for tokens in p]
 
-            # if self.n > 1:
-            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            # words = [tokens for p in posts for tokens in p]
             all_grams = list(set(words))
             if len(all_grams) > self.Delta_0:
                 selected_ngrams = np.random.choice(all_grams, size=self.Delta_0, replace=False).tolist()
@@ -135,9 +132,6 @@ class Histogram:
                     posts = [ut.tokens2ngram(p, self.n) for p in posts]
                 words = [tokens for p in posts for tokens in p]
 
-            # if self.n > 1:
-            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            # words = [tokens for p in posts for tokens in p]
             all_grams = list(set(words))
 
             if len(all_grams) > self.Delta_0:
@@ -200,9 +194,6 @@ class Histogram:
                         posts = [ut.tokens2ngram(p, self.n) for p in posts]
                     words = [tokens for p in posts for tokens in p]
 
-                # if self.n > 1:
-                #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
-                # words = [tokens for p in posts for tokens in p]
                 all_grams = list(set(words))
 
                 # sample delta_0 ngrams
@@ -273,9 +264,7 @@ class Histogram:
                 if self.n > 1:
                     posts = [ut.tokens2ngram(p, self.n) for p in posts]
                 words = [tokens for p in posts for tokens in p]
-            # if self.n > 1:
-            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            # words = [tokens for p in posts for tokens in p]
+
             all_grams = list(set(words))
 
             if len(all_grams) > self.Delta_0:
@@ -341,9 +330,6 @@ class Histogram:
                         posts = [ut.tokens2ngram(p, self.n) for p in posts]
                     words = [tokens for p in posts for tokens in p]
 
-                # if self.n > 1:
-                #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
-                # words = [tokens for p in posts for tokens in p]
                 all_grams = list(set(words))
 
                 # sample delta_0 ngrams

@@ -20,21 +20,22 @@ tqdm >= 4.23.4
 
 ## Dataset
 For your own input file, the file must contain an "author" and a "clean_text" column where the clean text has been 
-preprocessed and tokenized. For an example, see utils.py. 
+preprocessed and tokenized. For an example, sample_data.csv. Please note sample_data.csv contains random text from wikitext-2 and has too few entries to release ngrams. Please use solely as a reference for data formatting.  
 
 ## Example: Generating a Histogram
 
-```
-python gen_histogram.py --save_histogram --dataset input_data.csv
+```[
+python gen_histogram.py --save_histogram --dataset sample_data.csv
 ```
 This generates and saves a histogram with the Policy Gaussian algorithm and outputs the number of unigrams released. 
 
 ```
-python gen_histogram.py --alg policy --noise laplace --ngram 2 --trials 3 --dataset input_data.csv
+python gen_histogram.py --alg policy --noise laplace --ngram 2 --trials 3 --dataset sample_data.csv
 ```
 To change which algorithm is used specify the --alg and --noise parameter. 
 To change the n of ngrams in the histogram use: --ngrams . For multiple shuffles 
 of the dataset, use the --trials parameter. 
 
 ## Acknowledgments
+This work was done during an AI Residency at Microsoft Research.  
 

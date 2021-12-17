@@ -166,7 +166,7 @@ def main():
 
     parser.add_argument("--alg",
                         type=str,
-                        default="maxsum",
+                        default="policy",
                         help="algorithm type: count, weighted, policy, maxsum")
 
     parser.add_argument("--alpha",
@@ -181,12 +181,12 @@ def main():
 
     parser.add_argument('--ngram',
                         type=int,
-                        default=2,
+                        default=1,
                         help="n for histogram ngrams")
 
     parser.add_argument('--ngram_union',
                         action="store_true",
-                        default=True,
+                        default=False,
                         help="union of ngrams")
 
     parser.add_argument('--trials',
@@ -201,7 +201,7 @@ def main():
 
     parser.add_argument('--dataset',
                         type=str,
-                        default='clean_askreddit.csv',
+                        default='clean_data.csv',
                         help='path to dataset in .csv format with "clean_data" column')
 
     parser.add_argument("--save_histogram",
