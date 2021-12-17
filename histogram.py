@@ -21,6 +21,7 @@ class Algorithm(Enum):
     WEIGHTED = 2
     POLICY = 3
     GREEDY = 4
+    MAXSUM = 5
 
 
 class Histogram:
@@ -28,14 +29,15 @@ class Histogram:
     Histogram class for generating histograms from different policies
     self.ngram_hist contains the generated histogram
     '''
-    def __init__(self, n, input_df, dataset_str):
+    def __init__(self, n, input_df, dataset_str, ngram_union):
         '''
         Initializing histogram class
         :param n: n in n-gram to build histogram from
         :param input_df: input dataframe with clean text data under "clean_text" column
         :param dataset_str: name of dataset in input_df
         '''
-        self.n = n 
+        self.n = n
+        self.ngram_union = ngram_union
         self.ngram_hist = None 
         self.input_df = input_df
         self.Delta_0 = None
@@ -53,9 +55,19 @@ class Histogram:
         for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
             posts = group["clean_text"]
             posts = [p.split(" ") for p in posts]
-            if self.n > 1:
-                posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            words = [tokens for p in posts for tokens in p]
+
+            if self.ngram_union:
+                words = [tokens for p in posts for tokens in p]
+                for i in range(2, self.n + 1):
+                    posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                    words = words + [tokens for p in posts_tokenized for tokens in p]
+            else:
+                if self.n > 1:
+                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                words = [tokens for p in posts for tokens in p]
+            # if self.n > 1:
+            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+            # words = [tokens for p in posts for tokens in p]
             self.ngram_hist.update(list(set(words)))
         return self.ngram_hist
 
@@ -72,9 +84,19 @@ class Histogram:
         for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
             posts = group["clean_text"]
             posts = [p.split(" ") for p in posts]
-            if self.n > 1: 
-                posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            words = [tokens for p in posts for tokens in p]
+            if self.ngram_union:
+                words = [tokens for p in posts for tokens in p]
+                for i in range(2, self.n + 1):
+                    posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                    words = words + [tokens for p in posts_tokenized for tokens in p]
+            else:
+                if self.n > 1:
+                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                words = [tokens for p in posts for tokens in p]
+
+            # if self.n > 1:
+            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+            # words = [tokens for p in posts for tokens in p]
             all_grams = list(set(words))
             if len(all_grams) > self.Delta_0:
                 selected_ngrams = np.random.choice(all_grams, size=self.Delta_0, replace=False).tolist()
@@ -102,10 +124,22 @@ class Histogram:
         for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
             posts = group["clean_text"]
             posts = [p.split(" ") for p in posts]
-            if self.n > 1: 
-                posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            words = [tokens for p in posts for tokens in p]
+
+            if self.ngram_union:
+                words = [tokens for p in posts for tokens in p]
+                for i in range(2, self.n + 1):
+                    posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                    words = words + [tokens for p in posts_tokenized for tokens in p]
+            else:
+                if self.n > 1:
+                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                words = [tokens for p in posts for tokens in p]
+
+            # if self.n > 1:
+            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+            # words = [tokens for p in posts for tokens in p]
             all_grams = list(set(words))
+
             if len(all_grams) > self.Delta_0:
                 selected_ngrams = np.random.choice(all_grams, size=self.Delta_0, replace=False).tolist()
             else:
@@ -155,9 +189,20 @@ class Histogram:
             for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
                 posts = group["clean_text"]
                 posts = [p.split(" ") for p in posts]
-                if self.n > 1:
-                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
-                words = [tokens for p in posts for tokens in p]
+
+                if self.ngram_union:
+                    words = [tokens for p in posts for tokens in p]
+                    for i in range(2, self.n + 1):
+                        posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                        words = words + [tokens for p in posts_tokenized for tokens in p]
+                else:
+                    if self.n > 1:
+                        posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                    words = [tokens for p in posts for tokens in p]
+
+                # if self.n > 1:
+                #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                # words = [tokens for p in posts for tokens in p]
                 all_grams = list(set(words))
 
                 # sample delta_0 ngrams
@@ -218,9 +263,19 @@ class Histogram:
         for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
             posts = group["clean_text"]
             posts = [p.split(" ") for p in posts]
-            if self.n > 1:
-                posts = [ut.tokens2ngram(p, self.n) for p in posts]
-            words = [tokens for p in posts for tokens in p]
+
+            if self.ngram_union:
+                words = [tokens for p in posts for tokens in p]
+                for i in range(2, self.n + 1):
+                    posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                    words = words + [tokens for p in posts_tokenized for tokens in p]
+            else:
+                if self.n > 1:
+                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                words = [tokens for p in posts for tokens in p]
+            # if self.n > 1:
+            #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+            # words = [tokens for p in posts for tokens in p]
             all_grams = list(set(words))
 
             if len(all_grams) > self.Delta_0:
@@ -275,9 +330,20 @@ class Histogram:
             for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
                 posts = group["clean_text"]
                 posts = [p.split(" ") for p in posts]
-                if self.n > 1:
-                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
-                words = [tokens for p in posts for tokens in p]
+
+                if self.ngram_union:
+                    words = [tokens for p in posts for tokens in p]
+                    for i in range(2, self.n + 1):
+                        posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                        words = words + [tokens for p in posts_tokenized for tokens in p]
+                else:
+                    if self.n > 1:
+                        posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                    words = [tokens for p in posts for tokens in p]
+
+                # if self.n > 1:
+                #     posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                # words = [tokens for p in posts for tokens in p]
                 all_grams = list(set(words))
 
                 # sample delta_0 ngrams
@@ -306,6 +372,76 @@ class Histogram:
                 assert(np.round(np.linalg.norm(sum_contrib, 2), 3) <= np.round(np.sqrt(self.Delta), 3))
 
         return self.ngram_hist
+
+    def generate_maxsum_gaussian_hist(self, delta_0, Gamma, passes=1, delta=None):
+        '''
+        Generate histogram according to max-sum Gaussian policy
+        :param Delta_0: parameter limiting number of unique ngrams each user can contribute
+        :n_list: build histogram on range of ngrams for n \in n_list
+        :return: generated histogram
+        '''
+
+        self.ngram_hist = defaultdict(float)
+        self.Delta_0 = delta_0
+        self.Delta = delta if delta else 1
+        # divide budget by number of passes that will be made
+        self.Delta = self.Delta/passes
+        self.noise_dist = Noise.GAUSSIAN
+        self.algorithm = Algorithm.MAXSUM
+        self.num_tokens = []
+        for index, group in tqdm(self.input_df.groupby("author"), position=0, leave=True):
+            posts = group["clean_text"]
+            posts = [p.split(" ") for p in posts]
+
+            if self.ngram_union:
+                user_ngrams = [tokens for p in posts for tokens in p]
+                for i in range(2, self.n+1):
+                    posts_tokenized = [ut.tokens2ngram(p, i) for p in posts]
+                    user_ngrams = user_ngrams + [tokens for p in posts_tokenized for tokens in p]
+            else:
+                if self.n > 1:
+                    posts = [ut.tokens2ngram(p, self.n) for p in posts]
+                user_ngrams = [tokens for p in posts for tokens in p]
+
+            unique_user_ngrams = list(set(user_ngrams))
+            self.num_tokens.append(unique_user_ngrams)
+
+            if len(unique_user_ngrams) > self.Delta_0:
+                selected_ngrams = np.random.choice(unique_user_ngrams, size=self.Delta_0, replace=False).tolist()
+            else:
+                selected_ngrams = unique_user_ngrams
+
+            gap_dict = {}
+
+            for w in selected_ngrams:
+                if self.ngram_hist[w] < Gamma:
+                    gap_dict[w] = Gamma - self.ngram_hist[w]
+            # sort rho dict
+            sorted_gap_dict = sorted(gap_dict.items(), key=lambda x: x[0])
+
+            sorted_gap_keys = [k for k, v in sorted_gap_dict]
+
+            budget = 1
+            total_tokens = len(sorted_gap_keys)
+
+            for i, w in enumerate(sorted_gap_keys):
+                cost = gap_dict[w] ** 2 * (total_tokens - i)
+                if cost < budget:
+                    self.ngram_hist[w] = Gamma
+                    # update remaining budget
+                    budget -= gap_dict[w] ** 2
+                else:
+                    for j in range(i, total_tokens):
+                        add_gram = sorted_gap_keys[j]
+                        self.ngram_hist[add_gram] += budget / np.sqrt(total_tokens - i)
+                    break
+
+        save_str = 'user_tokens_{}_union.npy'.format(self.n) if self.ngram_union else 'user_tokens_{}.npy'.format(self.n)
+        with open(save_str, 'wb') as f:
+            np.save(f, np.asarray(self.num_tokens))
+            
+        return self.ngram_hist
+
 
     def save_hist(self, histogram_str, end_str):
         '''

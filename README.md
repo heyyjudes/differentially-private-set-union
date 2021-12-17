@@ -30,7 +30,7 @@ python gen_histogram.py --save_histogram --dataset input_data.csv
 This generates and saves a histogram with the Policy Gaussian algorithm and outputs the number of unigrams released. 
 
 ```
-python gen_histogram.py --alg policy --noise laplace --n 2 --trials 3 --dataset input_data.csv
+python gen_histogram.py --alg policy --noise laplace --ngram 2 --trials 3 --dataset input_data.csv
 ```
 To change which algorithm is used specify the --alg and --noise parameter. 
 To change the n of ngrams in the histogram use: --ngrams . For multiple shuffles 

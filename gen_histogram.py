@@ -11,7 +11,7 @@ import histogram as hgram
 
 
 def test_histogram(input_df, Delta_0, n, distribution, algorithm, num_iter, delta=np.e**(-10), eps=3, passes=1, alpha=2,
-                   save_hist=False):
+                   save_hist=False, ngram_union=False):
     '''
     method for testing various histogram generation algorithms
     :param input_df: input dataframe of clean, tokenized data
@@ -28,7 +28,8 @@ def test_histogram(input_df, Delta_0, n, distribution, algorithm, num_iter, delt
     output_arr = []
     for i in range(num_iter):
         print("generating {}-gram histogram, iteration {}".format(n, i))
-        new_hist = hgram.Histogram(n, input_df.sample(frac=1), 'askreddit')
+        #new_hist = hgram.Histogram(n, input_df.sample(frac=1), 'askreddit')
+        new_hist = hgram.Histogram(n, input_df, 'askreddit', ngram_union)
         if distribution == hgram.Noise.LAPLACE:
             # calculating LaPlace parameter: using Delta_0/eps if Delta not provided (same in hist gen methods
             if algorithm == hgram.Algorithm.COUNT:
@@ -83,6 +84,12 @@ def test_histogram(input_df, Delta_0, n, distribution, algorithm, num_iter, delt
                 if save_hist:
                     save_str = str(Delta_0)
                     new_hist.save_hist("policy_gaussian", save_str)
+            elif algorithm == hgram.Algorithm.MAXSUM:
+                g_param, g_rho = calculate_threshold(algorithm, distribution, eps, delta, Delta_0)
+                new_hist.generate_maxsum_gaussian_hist(delta_0=Delta_0, Gamma=g_rho + alpha*g_param, passes=passes)
+                if save_hist:
+                    save_str = str(Delta_0)
+                    new_hist.save_hist("maxsum_gaussian", save_str)
             else:
                 print('Error check input algorithm string')
                 return
@@ -129,7 +136,7 @@ def calculate_threshold(algorithm, noise, eps, delta, Delta_0):
             g_param = agm.calibrate_analytic_gaussian_mechanism(epsilon=eps, delta=delta / 2,
                                                                 GS=scipy.sqrt(Delta_0), tol=1.e-12)
             g_rho = 1 + g_param * scipy.stats.norm.ppf((1 - delta / 2) ** (1 / Delta_0))
-        elif algorithm == hgram.Algorithm.WEIGHTED or algorithm == hgram.Algorithm.POLICY:
+        elif algorithm == hgram.Algorithm.WEIGHTED or algorithm == hgram.Algorithm.POLICY or algorithm==hgram.Algorithm.MAXSUM:
             g_param = agm.calibrate_analytic_gaussian_mechanism(epsilon=eps, delta=delta / 2, GS=1, tol=1.e-12)
             F_g_rho = lambda t: 1 / scipy.sqrt(t) + g_param * scipy.stats.norm.ppf((1 - delta / 2) ** (1 / t))
             g_rho = max([F_g_rho(t) for t in range(1, Delta_0 + 1)])
@@ -159,8 +166,8 @@ def main():
 
     parser.add_argument("--alg",
                         type=str,
-                        default="policy",
-                        help="algorithm type: count, weighted, policy")
+                        default="maxsum",
+                        help="algorithm type: count, weighted, policy, maxsum")
 
     parser.add_argument("--alpha",
                         type=float,
@@ -174,8 +181,13 @@ def main():
 
     parser.add_argument('--ngram',
                         type=int,
-                        default=1,
+                        default=2,
                         help="n for histogram ngrams")
+
+    parser.add_argument('--ngram_union',
+                        action="store_true",
+                        default=True,
+                        help="union of ngrams")
 
     parser.add_argument('--trials',
                         type=int,
@@ -189,6 +201,7 @@ def main():
 
     parser.add_argument('--dataset',
                         type=str,
+                        default='clean_askreddit.csv',
                         help='path to dataset in .csv format with "clean_data" column')
 
     parser.add_argument("--save_histogram",
@@ -214,17 +227,20 @@ def main():
         alg = hgram.Algorithm.POLICY
     elif re.match(args.alg, 'greedy', re.IGNORECASE):
         alg = hgram.Algorithm.GREEDY
+    elif re.match(args.alg, 'maxsum', re.IGNORECASE):
+        alg = hgram.Algorithm.MAXSUM
     else:
-        raise Exception("Please enter 'count', 'weighted', 'policy', or 'greedy' as --alg parameter")
+        raise Exception("Please enter 'count', 'weighted', 'policy', 'maxsum', or 'greedy' as --alg parameter")
 
     reddit_df = pd.read_csv(args.dataset, index_col=0)
     reddit_df = reddit_df.dropna()
 
     result_arr = test_histogram(input_df=reddit_df, Delta_0=args.D0, n=args.ngram, distribution=dist, algorithm=alg,
                                 eps=args.eps, delta=args.delta, num_iter=args.trials, passes=args.passes,
-                                alpha=args.alpha, save_hist=args.save_histogram)
+                                alpha=args.alpha, save_hist=args.save_histogram, ngram_union=args.ngram_union)
 
-    print("Output for {} {} with {} trials for alpha {} run".format(alg, dist, args.trials, args.alpha))
+    print("Output for {} {} with {} trials for alpha {}, eps {}, delta0 {} run".format(alg, dist,
+                                                            args.trials, args.alpha, args.eps, args.D0))
     print("Mean released ngram count:", np.mean(result_arr))
     print("STD of released ngram count: ", np.std(result_arr))
 
